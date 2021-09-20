@@ -1,0 +1,103 @@
+from collections import Counter
+import json
+
+with open("physicists_birth.json", "r") as f:
+    physicists_birthday_dict = json.load(f)
+
+month_list = []
+
+for e in physicists_birthday_dict:
+    letter_count = 0
+    for c in physicists_birthday_dict[e]:
+        if c.isalpha():
+            letter_count += 1
+        else:
+            break
+    month = physicists_birthday_dict[e][0: letter_count]
+    month_list.append(month)
+
+counted_month = Counter(month_list)
+
+for e in counted_month:
+    if counted_month[e] > 1:
+        print("There are {} physicists born in the month of {} in this list".format(counted_month[e], e))
+    else:
+        print("There is {} physicists born in the month of {} in this list".format(counted_month[e], e))
+
+####################################
+
+import json
+
+physicists_birthday_dict = {}
+
+with open("physicists_birth.json", "r") as f:
+    physicists_birthday_dict = json.load(f)
+
+def add_entry():
+    name = input('Who do you want to add to the Physicists Birthday Dictionnary?\n').title()
+    date = input('When is {} born?\n'.format(name))
+    physicists_birthday_dict[name] = date
+    with open("physicists_birth.json", "w") as f:
+        json.dump(physicists_birthday_dict, f)
+        print('{} was added to my physicists birthday list\n'.format(name))
+
+
+def find_date():
+    name = input("who's birthday do you want to know?\n").title()
+    try:
+        if physicists_birthday_dict[name]:
+            print('{} is born on {}\n'.format(name, physicists_birthday_dict[name]))
+    except KeyError:
+        print('{} is not in the list\n'.format(name))
+
+def list_entries():
+    print('The current entries in my physicists birthday list are:\n============================================')
+    for key in physicists_birthday_dict:
+        print(key.ljust(31), ':', physicists_birthday_dict[key])
+    print()
+
+while True:
+    what_next = input('What do you want to do next? you can: Add, Find, List, Quit: ').capitalize()
+    if what_next == 'Quit':
+        print('Good Bye')
+        raise SystemExit(0)
+    elif what_next == 'Add':
+        add_entry()
+    elif what_next == 'Find':
+        find_date()
+    elif what_next == 'List':
+        list_entries()
+
+
+###########################################
+
+physicists_name = ("Albert Einstein", "Stephen Hawking", "Sir Isaac Newton", "Marie Curie", "Niels Bohr", "Michio Kaku",
+                   "Richard Feynman", "Ernest Rutherford", "HC Oersted", "Max Planck", "Erwin Schrodinger",
+                   "James Clerk Maxwell", "Werner Heisenberg")
+
+physicists_birthday_dict = {
+    physicists_name[0]: "March 14, 1879",
+    physicists_name[1]: "January 8, 1942",
+    physicists_name[2]: "January 4, 1643",
+    physicists_name[3]: "November 7, 1867",
+    physicists_name[4]: "October 7, 1885",
+    physicists_name[5]: "January 24, 1947",
+    physicists_name[6]: "May 11, 1918",
+    physicists_name[7]: "August 30, 1871",
+    physicists_name[8]: "August 14, 1777",
+    physicists_name[9]: "April 23, 1858",
+    physicists_name[10]: "August 12, 1887",
+    physicists_name[11]: "June 13, 1831",
+    physicists_name[12]: "December 5, 1901"
+}
+
+
+
+if __name__ == "__main__":
+    print("Welcome to the physicists birthday dictionary! We have the following names: ")
+    for name in physicists_name:
+        print(name)
+
+    choosen_physicist = input("Who's birthday do you want to look up?: ")
+    print(physicists_birthday_dict.get(choosen_physicist, "We do not have the data from that physicist"))
+
